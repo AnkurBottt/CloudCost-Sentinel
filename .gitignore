@@ -1,0 +1,64 @@
+# ──────────────────────────────────────────────────────────────
+# CloudCost Sentinel — .gitignore
+# ──────────────────────────────────────────────────────────────
+
+# Private learning / explanation docs
+docs/
+
+# Data directories (large files, never committed)
+data/raw_focus.csv
+data/raw_focus_large.csv.gz
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+#leagacy notebooks
+notebooks/legacy/
+
+#scripts
+scripts/
+
+# MLflow
+*.db
+mlflow_artifacts/
+mlruns/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model artifacts (tracked via MLflow, not Git)
+*.pkl
+*.keras
+*.h5
+
+# Keep only deployment artifacts required by Docker/FastAPI
+!models/cloudcost/xgb_optuna_model.pkl
+!models/cloudcost/xgb_optuna_feature_columns.pkl
+
+# Additional ignored paths
+.gemini/
+backup/

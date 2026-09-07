@@ -1,0 +1,35 @@
+# ==============================
+# Data / ML
+# ==============================
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+xgboost
+tensorflow
+
+# ==============================
+# MLOps
+# ==============================
+mlflow
+
+# ==============================
+# API / Backend
+# ==============================
+fastapi
+uvicorn[standard]
+pydantic
+sqlalchemy
+
+# ==============================
+# HTTP
+# ==============================
+requests
+
+# ==============================
+# Configuration
+# ==============================
+python-dotenv
+pyyaml
+joblib
