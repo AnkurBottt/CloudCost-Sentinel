@@ -132,7 +132,7 @@ uvicorn api.main:app --reload --port 8000
 ## Project Structure
 
 ```text
-cloudCostReducn/
+cloudCostAnomaly/
 ├── api/
 │   ├── main.py
 │   ├── database.py
