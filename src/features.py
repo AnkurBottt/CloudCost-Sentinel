@@ -16,9 +16,7 @@ import pandas as pd
 def add_features(df):
     df = df.copy()
     df["date"] = pd.to_datetime(df["date"])
-    # CHANGED: explicitly sort by context + date before historical features.
-    # This makes "previous" unambiguously mean the previous observation
-    # for the same provider/service/region.
+    # explicitly sort by context + date before historical features.
     group_cols = ["ProviderName", "ServiceName", "RegionName"]
     df = df.sort_values(group_cols + ["date"]).reset_index(drop=True)
 
@@ -29,27 +27,20 @@ def add_features(df):
     grouped = df.groupby(group_cols, dropna=False) # a grouped view/instruction over the dataframe
 
     # Previous cost for the same context
-    df["previous_cost"] = grouped["daily_cost"].shift(1) # move_evry_value_down_byNrows(N)
+    df["previous_cost"] = grouped["daily_cost"].shift(1) # move_evry_value_down_byNrows(N) here N = 1
 
     # Previous 7 observations only.
-    # shift(1) means today's cost is NOT included in today's baseline.
     df["rolling_7d_avg"] = grouped["daily_cost"].transform(
         lambda s: s.shift(1).rolling(7, min_periods=1).mean()
     )
 
     # How large is today's cost compared with its recent average?
-    # np.where(condition, value_if_true, value_if_false)
     df["cost_vs_7d_avg"] = np.where(
         df["rolling_7d_avg"] > 0,
         df["daily_cost"] / df["rolling_7d_avg"],
         1.0,
     )
-
-    # CHANGED:
-    # Add a rolling MEDIAN signal as well as the rolling mean.
-    # A mean can be pulled upward by a previous cost spike.
-    # The median is more robust, so it gives XGBoost another way
-    # to decide whether today's value is unusual.
+    # A mean can be pulled upward by a previous cost spike, the median is more robust, so it gives XGBoost another way to decide whether today's value is unusual.
     df["rolling_7d_median"] = grouped["daily_cost"].transform(
         lambda s: s.shift(1).rolling(7, min_periods=1).median()
     )
@@ -60,9 +51,7 @@ def add_features(df):
         1.0,
     )
 
-    # New groups have no history yet, so use simple defaults.
-    # data.py now avoids injecting synthetic anomalies into these
-    # history-less rows, so these defaults are mainly for normal rows.
+    # New groups have no history yet, so use simple defaults, data.py now avoids injecting synthetic anomalies into these history-less rows, so these defaults are mainly for normal rows.
     df["previous_cost"] = df["previous_cost"].fillna(df["daily_cost"])
     df["rolling_7d_avg"] = df["rolling_7d_avg"].fillna(df["daily_cost"])
     df["rolling_7d_median"] = df["rolling_7d_median"].fillna(df["daily_cost"])
@@ -134,11 +123,7 @@ def prepare_xy(train_df, val_df, test_df):
     X_val = pd.get_dummies(val_df[feature_columns], dtype=int)
     X_test = pd.get_dummies(test_df[feature_columns], dtype=int)
 
-    # NOTE:
     # Reindexing keeps validation/test columns identical to training.
-    # A category never seen during training becomes all-zero across the
-    # known dummy columns. That is acceptable for this simple V1, though
-    # a fitted OneHotEncoder(handle_unknown="ignore") is cleaner later.
     X_val = X_val.reindex(columns=X_train.columns, fill_value=0)
     X_test = X_test.reindex(columns=X_train.columns, fill_value=0)
 
