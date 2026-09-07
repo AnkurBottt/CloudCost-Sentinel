@@ -5,6 +5,7 @@ from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_
 def evaluate_model(y_true, probabilities, threshold=0.5):
     predictions = (np.array(probabilities) >= threshold).astype(int)
 
+    # metrics calculations
     precision = precision_score(y_true, predictions, zero_division=0)
     recall = recall_score(y_true, predictions, zero_division=0)
     f1 = f1_score(y_true, predictions, zero_division=0)
@@ -34,7 +35,7 @@ def print_metrics(metrics, model_name):
 
 
 def find_best_threshold(y_true, probabilities):
-    # old search was only 0.3-0.7; for an imbalanced detector useful thresholds can be lower
+    # custom threshold selector based on validation f1 scores 
     thresholds = np.arange(0.05, 0.96, 0.05)
     best_threshold = 0.5
     best_f1 = -1
