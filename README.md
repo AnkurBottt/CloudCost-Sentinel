@@ -148,8 +148,6 @@ cloudCostReducn/
 │   ├── features.py
 │   ├── evaluate.py
 │   └── train.py
-├── notebooks/
-├── docs/
 ├── Dockerfile
 ├── .dockerignore
 ├── requirements.txt
