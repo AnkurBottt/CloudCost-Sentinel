@@ -393,77 +393,6 @@ def train_neural_network(
         print("\nMLflow logging skipped.")
         print("Reason:", e)
 
-
-# choose what to train
-
-def main():
-
-    mlflow.set_tracking_uri(MLFLOW_URI)
-
-    (
-        train_df, val_df, test_df,
-        X_train, X_val, X_test,
-        y_train, y_val, y_test
-    ) = load_data()
-
-    print("\nChoose a model:")
-    print("1 - Logistic Regression")
-    print("2 - XGBoost")
-    print("3 - Neural Network")
-    print("4 - Run all")
-
-    choice = input("\nEnter choice: ").strip()
-
-    if choice == "1":
-        train_logistic_regression(
-            X_train, X_val, X_test,
-            y_train, y_val, y_test
-        )
-
-    elif choice == "2":
-
-        tune_choice = input(
-            "\nUse Optuna tuning? (y/n): "
-        ).strip().lower()
-
-        if tune_choice == "y":
-            tune_xgboost(
-                X_train, X_val, X_test,
-                y_train, y_val, y_test
-            )
-
-        else:
-            train_xgboost(
-                X_train, X_val, X_test,
-                y_train, y_val, y_test
-            )
-
-    elif choice == "3":
-        train_neural_network(
-            X_train, X_val, X_test,
-            y_train, y_val, y_test
-        )
-
-    elif choice == "4":
-        train_logistic_regression(
-            X_train, X_val, X_test,
-            y_train, y_val, y_test
-        )
-
-        train_xgboost(
-            X_train, X_val, X_test,
-            y_train, y_val, y_test
-        )
-
-        train_neural_network(
-            X_train, X_val, X_test,
-            y_train, y_val, y_test
-        )
-
-    else:
-        print("Invalid choice.")
-
-
 # Optuna tuned XGBoost
 # def objective(trial):
 #     1. trial suggests XGBoost hyperparameters
@@ -608,3 +537,74 @@ def tune_xgboost(X_train, X_val, X_test, y_train, y_val, y_test):
     
 if __name__ == "__main__":
     main()
+
+
+# choose what to train
+
+def main():
+
+    mlflow.set_tracking_uri(MLFLOW_URI)
+
+    (
+        train_df, val_df, test_df,
+        X_train, X_val, X_test,
+        y_train, y_val, y_test
+    ) = load_data()
+
+    print("\nChoose a model:")
+    print("1 - Logistic Regression")
+    print("2 - XGBoost")
+    print("3 - Neural Network")
+    print("4 - Run all")
+
+    choice = input("\nEnter choice: ").strip()
+
+    if choice == "1":
+        train_logistic_regression(
+            X_train, X_val, X_test,
+            y_train, y_val, y_test
+        )
+
+    elif choice == "2":
+
+        tune_choice = input(
+            "\nUse Optuna tuning? (y/n): "
+        ).strip().lower()
+
+        if tune_choice == "y":
+            tune_xgboost(
+                X_train, X_val, X_test,
+                y_train, y_val, y_test
+            )
+
+        else:
+            train_xgboost(
+                X_train, X_val, X_test,
+                y_train, y_val, y_test
+            )
+
+    elif choice == "3":
+        train_neural_network(
+            X_train, X_val, X_test,
+            y_train, y_val, y_test
+        )
+
+    elif choice == "4":
+        train_logistic_regression(
+            X_train, X_val, X_test,
+            y_train, y_val, y_test
+        )
+
+        train_xgboost(
+            X_train, X_val, X_test,
+            y_train, y_val, y_test
+        )
+
+        train_neural_network(
+            X_train, X_val, X_test,
+            y_train, y_val, y_test
+        )
+
+    else:
+        print("Invalid choice.")
+...
