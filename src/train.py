@@ -534,10 +534,6 @@ def tune_xgboost(X_train, X_val, X_test, y_train, y_val, y_test):
     except Exception as e:
         print("\nMLflow logging/registry skipped.")
         print("Reason:", e)
-    
-if __name__ == "__main__":
-    main()
-
 
 # choose what to train
 
@@ -607,4 +603,6 @@ def main():
 
     else:
         print("Invalid choice.")
-...
+
+if __name__ == "__main__":
+    main()
